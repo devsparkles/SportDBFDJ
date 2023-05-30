@@ -5,7 +5,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.kodesparkle.sportdbfdj.presentation.screens.leagues_show.components.LeagueScreen
+import com.kodesparkle.sportdbfdj.presentation.screens.leagues_search.components.LeagueScreen
 
 @Composable
 fun ScreenNavHost(

@@ -1,4 +1,4 @@
-package com.kodesparkle.sportdbfdj.presentation.screens.leagues_show.components
+package com.kodesparkle.sportdbfdj.presentation.screens.leagues_search.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
@@ -17,7 +17,7 @@ fun LeagueElement(
     Text(
         modifier = Modifier.fillMaxWidth(),
         text = leagueItem.strLeague ?: "",
-        fontSize = 20.sp,
+        fontSize = 15.sp,
         fontWeight = FontWeight.Black,
         color = Color.Black
     )

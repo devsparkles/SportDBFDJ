@@ -1,4 +1,4 @@
-package com.kodesparkle.sportdbfdj.presentation.screens.leagues_show
+package com.kodesparkle.sportdbfdj.presentation.screens.leagues_search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
