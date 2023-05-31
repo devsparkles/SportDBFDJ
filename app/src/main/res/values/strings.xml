@@ -2,5 +2,6 @@
     <string name="app_name">SportDBFDJ</string>
 
     <string name="no_league_found">No league found</string>
+    <string name="search_league">Search league</string>
 
 </resources>

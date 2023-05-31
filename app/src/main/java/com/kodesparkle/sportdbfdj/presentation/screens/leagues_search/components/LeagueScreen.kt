@@ -16,7 +16,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -32,11 +32,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kodesparkle.sportdbfdj.R
 import com.kodesparkle.sportdbfdj.domain.model.LeagueItem
 import com.kodesparkle.sportdbfdj.presentation.screens.leagues_search.LeaguesViewModel
 
@@ -46,8 +48,8 @@ fun LeagueScreen(
     viewModel: LeaguesViewModel = hiltViewModel(),
     onLeagueClicked: (LeagueItem) -> Unit
 ) {
-    val loading by viewModel.loading.observeAsState(initial = false)
-    val leagues by viewModel.leagueItems.observeAsState(initial = mutableListOf())
+    val loading by viewModel.isSearching.collectAsState(initial = false)
+    val leagues by viewModel.leagues.collectAsState(initial = mutableListOf())
 
     Scaffold(topBar = { SearchBar(leagues, onLeagueClicked, viewModel::searchLeague) },
         content = { innerPadding ->
@@ -111,38 +113,42 @@ fun SearchBar(
             SearchBar(
                 modifier = Modifier.align(Alignment.TopCenter),
                 query = text,
-                onQueryChange = { text = it },
+                onQueryChange = {
+                    text = it
+                    searchLeague(text)
+                },
                 onSearch = {
                     active = false
-                    searchLeague(text)
                 },
                 active = active,
                 onActiveChange = {
                     active = it
                 },
-                placeholder = { Text("Search league") },
+                placeholder = { Text(stringResource(R.string.search_league)) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                trailingIcon = { Icon(Icons.Default.MoreVert, contentDescription = null) },
+                trailingIcon = { },
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     items(leagues) { idx ->
-                        val resultText = "${idx.strLeague}"
                         ListItem(
-                            headlineContent = { Text(resultText) },
+                            headlineContent = { Text(idx.strLeague) },
                             supportingContent = { Text(idx.strSport) },
                             leadingContent = { Icon(Icons.Filled.Star, contentDescription = null) },
                             modifier = Modifier.clickable {
-                                text = resultText
+                                text = idx.strLeague
                                 active = false
+                                onLeagueClicked(idx)
                             }
                         )
                     }
                 }
             }
+
         }
 
     }

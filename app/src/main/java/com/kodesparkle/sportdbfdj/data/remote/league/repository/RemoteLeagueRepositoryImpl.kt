@@ -1,6 +1,7 @@
 package com.kodesparkle.sportdbfdj.data.remote.league.repository
 
 import com.kodesparkle.sportdbfdj.data.mapper.toDomain
+import com.kodesparkle.sportdbfdj.data.remote.league.dto.LeagueResultsDto
 import com.kodesparkle.sportdbfdj.data.remote.league.service.LeagueService
 import com.kodesparkle.sportdbfdj.domain.model.LeagueResultItem
 import com.kodesparkle.sportdbfdj.domain.repository.RemoteLeagueRepository
@@ -9,9 +10,15 @@ import com.kodesparkle.sportdbfdj.utils.resource.Resource
 class RemoteLeagueRepositoryImpl(private val leagueService: LeagueService) :
     RemoteLeagueRepository {
 
+    // since the backend do not have a working cache we will use a local cache for that demo
+    var cache: LeagueResultsDto? = null
+
     override suspend fun getLeagues(): Resource<LeagueResultItem?> {
+        if (cache == null) {
+            cache = leagueService.getAllLeagues()
+        }
         try {
-            val response = Resource.of { leagueService.getAllLeagues() }
+            val response = Resource.of { cache }
             // if we wanted to call other services to combine their information we do that here
             // we could also do something like response.isAnError()
             // and call another service that could talk to another endpoint on another server
