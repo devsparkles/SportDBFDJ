@@ -21,7 +21,7 @@ fun TeamScreen(
 ) {
 
     val loading by viewModel.loading.observeAsState()
-    val posts by viewModel.leagueItems.observeAsState()
+    val posts by viewModel.teamItems.observeAsState()
 
     Box(
         modifier = Modifier

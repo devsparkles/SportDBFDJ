@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -33,26 +32,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kodesparkle.sportdbfdj.R
 import com.kodesparkle.sportdbfdj.domain.model.LeagueItem
 import com.kodesparkle.sportdbfdj.presentation.screens.leagues_search.LeaguesViewModel
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun LeagueScreen(
     viewModel: LeaguesViewModel = hiltViewModel(),
     onLeagueClicked: (LeagueItem) -> Unit
 ) {
-    val loading by viewModel.loading.observeAsState()
-    val leagues by viewModel.leagueItems.observeAsState()
+    val loading by viewModel.loading.observeAsState(initial = false)
+    val leagues by viewModel.leagueItems.observeAsState(initial = mutableListOf())
 
-    Scaffold(topBar = { SearchBar() },
+    Scaffold(topBar = { SearchBar(leagues, onLeagueClicked) },
         content = { innerPadding ->
             Box(
                 modifier = Modifier
@@ -60,7 +57,7 @@ fun LeagueScreen(
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                if (loading != null && loading == true) {
+                if (loading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(30.dp),
@@ -70,7 +67,12 @@ fun LeagueScreen(
                 } else {
 
                     LazyColumn(
-                        contentPadding = PaddingValues(start = 16.dp, top = 72.dp, end = 16.dp, bottom = 16.dp),
+                        contentPadding = PaddingValues(
+                            start = 16.dp,
+                            top = 72.dp,
+                            end = 16.dp,
+                            bottom = 16.dp
+                        ),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         val list = List(100) { "Text $it" }
@@ -83,12 +85,6 @@ fun LeagueScreen(
                             )
                         }
                     }
-//                    LeagueList(
-//                        leagues = leagues,
-//                        onLeagueClicked = {
-//                            onLeagueClicked(it)
-//                        }
-//                    )
                 }
             }
         }
@@ -98,14 +94,11 @@ fun LeagueScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar() {
+fun SearchBar(leagues: List<LeagueItem> = emptyList(), onLeagueClicked: (LeagueItem) -> Unit) {
     var text by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize()) {
-        // Talkback focus order sorts based on x and y position before considering z-index. The
-        // extra Box with semantics and fillMaxWidth is a workaround to get the search bar to focus
-        // before the content.
         Box(
             Modifier
                 .semantics { isTraversalGroup = true }
@@ -120,7 +113,7 @@ fun SearchBar() {
                 onActiveChange = {
                     active = it
                 },
-                placeholder = { Text("Hinted search text") },
+                placeholder = { Text("Search league") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 trailingIcon = { Icon(Icons.Default.MoreVert, contentDescription = null) },
             ) {
@@ -129,11 +122,11 @@ fun SearchBar() {
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    items(4) { idx ->
-                        val resultText = "Suggestion $idx"
+                    items(leagues) { idx ->
+                        val resultText = "${idx.strLeague}"
                         ListItem(
                             headlineContent = { Text(resultText) },
-                            supportingContent = { Text("Additional info") },
+                            supportingContent = { Text(idx.strSport) },
                             leadingContent = { Icon(Icons.Filled.Star, contentDescription = null) },
                             modifier = Modifier.clickable {
                                 text = resultText
@@ -148,23 +141,4 @@ fun SearchBar() {
     }
 }
 
-@Composable
-fun LeagueList(
-    leagues: MutableList<LeagueItem>?,
-    onLeagueClicked: (LeagueItem) -> Unit
-) {
-    if (leagues.isNullOrEmpty()) {
-        Text(
-            text = stringResource(R.string.no_league_found),
-        )
-    } else {
-        LazyColumn {
-            items(leagues) { league ->
-                LeagueElement(league) { l ->
-                    onLeagueClicked(l)
-                }
-            }
-        }
-    }
-}
 

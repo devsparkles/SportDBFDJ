@@ -1,7 +1,7 @@
 package com.kodesparkle.sportdbfdj.data.mapper
 
-import com.kodesparkle.sportdbfdj.data.remote.team.dto.LeagueDto
-import com.kodesparkle.sportdbfdj.data.remote.team.dto.LeagueResultsDto
+import com.kodesparkle.sportdbfdj.data.remote.league.dto.LeagueDto
+import com.kodesparkle.sportdbfdj.data.remote.league.dto.LeagueResultsDto
 import com.kodesparkle.sportdbfdj.domain.model.LeagueItem
 import com.kodesparkle.sportdbfdj.domain.model.LeagueResultItem
 import com.kodesparkle.sportdbfdj.utils.resource.Resource
@@ -19,10 +19,10 @@ fun Resource<LeagueResultsDto?>.toDomain(): Resource<LeagueResultItem?> {
 
 fun LeagueDto.toDomain(): LeagueItem {
     return LeagueItem(
-        idLeague = this.idLeague,
-        strLeague = this.strLeague,
-        strSport = this.strSport,
-        strLeagueAlternate = this.strLeagueAlternate
+        idLeague = this.idLeague ?: "",
+        strLeague = this.strLeague ?: "",
+        strSport = this.strSport ?: "",
+        strLeagueAlternate = this.strLeagueAlternate ?: "",
     )
 }
 

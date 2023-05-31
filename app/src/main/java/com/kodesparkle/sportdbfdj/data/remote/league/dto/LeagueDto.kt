@@ -1,4 +1,4 @@
-package com.kodesparkle.sportdbfdj.data.remote.team.dto
+package com.kodesparkle.sportdbfdj.data.remote.league.dto
 
 data class LeagueDto(
     val idLeague: String? = "",

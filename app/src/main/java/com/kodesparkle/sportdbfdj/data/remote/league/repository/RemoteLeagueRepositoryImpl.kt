@@ -1,16 +1,17 @@
-package com.kodesparkle.sportdbfdj.data.remote.team.repository
+package com.kodesparkle.sportdbfdj.data.remote.league.repository
 
 import com.kodesparkle.sportdbfdj.data.mapper.toDomain
-import com.kodesparkle.sportdbfdj.data.remote.team.service.TeamService
-import com.kodesparkle.sportdbfdj.domain.model.TeamSearchResultItem
-import com.kodesparkle.sportdbfdj.domain.repository.RemoteTeamRepository
+import com.kodesparkle.sportdbfdj.data.remote.league.service.LeagueService
+import com.kodesparkle.sportdbfdj.domain.model.LeagueResultItem
+import com.kodesparkle.sportdbfdj.domain.repository.RemoteLeagueRepository
 import com.kodesparkle.sportdbfdj.utils.resource.Resource
 
-class RemoteTeamRepositoryImpl(private val teamService: TeamService) : RemoteTeamRepository {
+class RemoteLeagueRepositoryImpl(private val leagueService: LeagueService) :
+    RemoteLeagueRepository {
 
-    override suspend fun searchTeamByLeagueName(leagueName: String): Resource<TeamSearchResultItem?> {
+    override suspend fun getLeagues(): Resource<LeagueResultItem?> {
         try {
-            val response = Resource.of { teamService.searchTeamsByLeague(leagueName) }
+            val response = Resource.of { leagueService.getAllLeagues() }
             // if we wanted to call other services to combine their information we do that here
             // we could also do something like response.isAnError()
             // and call another service that could talk to another endpoint on another server
@@ -23,5 +24,6 @@ class RemoteTeamRepositoryImpl(private val teamService: TeamService) : RemoteTea
             return Resource.Error(e)
         }
     }
+
 
 }

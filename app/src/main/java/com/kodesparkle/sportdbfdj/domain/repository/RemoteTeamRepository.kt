@@ -6,7 +6,5 @@ import com.kodesparkle.sportdbfdj.utils.resource.Resource
 
 interface RemoteTeamRepository {
 
-    suspend fun getLeagues(): Resource<LeagueResultItem?>
-
-    suspend fun searchTeam(teamName: String): Resource<TeamSearchResultItem?>
+    suspend fun searchTeamByLeagueName(leagueName: String): Resource<TeamSearchResultItem?>
 }
