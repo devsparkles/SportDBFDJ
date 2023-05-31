@@ -49,7 +49,7 @@ fun LeagueScreen(
     val loading by viewModel.loading.observeAsState(initial = false)
     val leagues by viewModel.leagueItems.observeAsState(initial = mutableListOf())
 
-    Scaffold(topBar = { SearchBar(leagues, onLeagueClicked) },
+    Scaffold(topBar = { SearchBar(leagues, onLeagueClicked, viewModel::searchLeague) },
         content = { innerPadding ->
             Box(
                 modifier = Modifier
@@ -94,7 +94,11 @@ fun LeagueScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(leagues: List<LeagueItem> = emptyList(), onLeagueClicked: (LeagueItem) -> Unit) {
+fun SearchBar(
+    leagues: List<LeagueItem> = emptyList(),
+    onLeagueClicked: (LeagueItem) -> Unit,
+    searchLeague: (String) -> Unit
+) {
     var text by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
 
@@ -108,7 +112,10 @@ fun SearchBar(leagues: List<LeagueItem> = emptyList(), onLeagueClicked: (LeagueI
                 modifier = Modifier.align(Alignment.TopCenter),
                 query = text,
                 onQueryChange = { text = it },
-                onSearch = { active = false },
+                onSearch = {
+                    active = false
+                    searchLeague(text)
+                },
                 active = active,
                 onActiveChange = {
                     active = it

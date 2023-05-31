@@ -27,8 +27,10 @@ class LeaguesViewModel @Inject constructor(
 
     fun searchLeague(query: String) {
         viewModelScope.launch(ioDispatcher) {
+            println("searching query: $query")
             _loading.postValue(true)
             val teams = searchLeaguesUseCase(query)
+            println("result query: $teams")
             _leagueItems.postValue(teams)
             _loading.postValue(false)
         }

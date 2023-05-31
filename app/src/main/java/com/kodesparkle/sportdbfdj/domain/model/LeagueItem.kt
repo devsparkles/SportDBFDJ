@@ -9,4 +9,8 @@ class LeagueItem(
     val strLeague: String = "",
     val strSport: String = "",
     val strLeagueAlternate: String = "",
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String {
+        return "LeagueItem(idLeague='$idLeague', strLeague='$strLeague', strSport='$strSport', strLeagueAlternate='$strLeagueAlternate')"
+    }
+}
