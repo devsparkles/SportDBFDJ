@@ -15,10 +15,7 @@ class SearchTeamByLeagueUseCase @Inject constructor(private val remoteTeamReposi
         if (leagues.isNotAnError()) {
             val l = leagues.value()?.teams
             l?.let {
-                val filteredList = it.filter { item ->
-                    item.name.contains(query, ignoreCase = true)
-                }
-                return filteredList.toMutableList()
+                return it.toMutableList()
             }
             return mutableListOf()
         } else {

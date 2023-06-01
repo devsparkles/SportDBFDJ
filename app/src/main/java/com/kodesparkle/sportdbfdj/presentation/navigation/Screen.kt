@@ -10,11 +10,14 @@ sealed class Screen(val name: String, val route: String) {
         name = "Home", route = "home"
     )
 
-    object Detail : Screen(
-        name = "Detail",
-        route = "detail"
+    object TeamList : Screen(
+        name = "TeamList", route = "teamlist"
     ){
-        const val backStackEntryStory = "league"
+        const val leagueNameArg = "leagueName"
+        val routeWithArgs = "$route/{$leagueNameArg}"
+        val arguments = listOf(
+            navArgument(leagueNameArg) { type = NavType.StringType }
+        )
     }
 
 

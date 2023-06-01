@@ -1,14 +1,14 @@
-package com.kodesparkle.sportdbfdj.presentation.screens.team_search
+package com.kodesparkle.sportdbfdj.presentation.screens.team_list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kodesparkle.sportdbfdj.di.annotations.IoDispatcher
-import com.kodesparkle.sportdbfdj.domain.model.LeagueItem
 import com.kodesparkle.sportdbfdj.domain.model.TeamItem
-import com.kodesparkle.sportdbfdj.domain.usecases.SearchLeaguesUseCase
 import com.kodesparkle.sportdbfdj.domain.usecases.SearchTeamByLeagueUseCase
+import com.kodesparkle.sportdbfdj.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class TeamSearchViewModel @Inject constructor(
+class TeamListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     val searchTeamByLeagueUseCase: SearchTeamByLeagueUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
@@ -26,15 +27,17 @@ class TeamSearchViewModel @Inject constructor(
         MutableLiveData(mutableListOf<TeamItem>())
     var teamItems: LiveData<MutableList<TeamItem>> = _teamItems
 
-    private val _loading: MutableLiveData<Boolean> = MutableLiveData(true)
-    val loading: LiveData<Boolean> = _loading
+    init {
+        savedStateHandle.get<String>(Screen.TeamList.leagueNameArg)?.let { leagueName ->
+            searchTeamByLeagueName(leagueName)
+        }
+    }
 
     fun searchTeamByLeagueName(leagueName: String) {
         viewModelScope.launch(ioDispatcher) {
-            _loading.postValue(true)
             val teams = searchTeamByLeagueUseCase(leagueName)
+            println("count of teams ${teams.size}")
             _teamItems.postValue(teams)
-            _loading.postValue(false)
         }
     }
 }

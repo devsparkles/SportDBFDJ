@@ -5,27 +5,34 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.kodesparkle.sportdbfdj.presentation.screens.leagues_search.components.LeagueScreen
+import com.kodesparkle.sportdbfdj.presentation.screens.leagues_search.LeagueScreen
+import com.kodesparkle.sportdbfdj.presentation.screens.team_list.TeamListScreen
 
 @Composable
 fun ScreenNavHost(
     navController: NavHostController
 ) {
 
-    NavHost(navController = navController, startDestination = Screen.Home.route) {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route
+    )
+    {
         // home screen is the first destination
         composable(
             route = Screen.Home.route
         ) {
             LeagueScreen(
-                onLeagueClicked = { league ->
-                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                        key = Screen.Detail.backStackEntryStory,
-                        value = league
-                    )
-                    navController.navigateSingleTopTo(Screen.Detail.route)
+                onLeagueClicked = { leagueName ->
+                    navController.navigateToTeamList(leagueName.strLeague)
                 }
             )
+        }
+        composable(
+            route = Screen.TeamList.routeWithArgs,
+            arguments = Screen.TeamList.arguments
+        ) {
+            TeamListScreen()
         }
     }
 }
@@ -47,3 +54,7 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         // Restore state when reselecting a previously selected item
         restoreState = true
     }
+
+private fun NavHostController.navigateToTeamList(leagueName: String) {
+    this.navigateSingleTopTo("${Screen.TeamList.route}/$leagueName")
+}

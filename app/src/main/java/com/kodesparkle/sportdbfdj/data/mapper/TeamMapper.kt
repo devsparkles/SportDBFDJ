@@ -11,7 +11,6 @@ fun Resource<TeamSearchResultDto?>.toDomain(): Resource<TeamSearchResultItem?> {
         is Resource.Success -> Resource.Success(
             this.value()?.toDomain()
         )
-
         is Resource.SuccessWithoutContent -> Resource.SuccessWithoutContent()
         is Resource.Error -> Resource.Error(this.error())
         is Resource.Loading -> Resource.Loading()
@@ -20,8 +19,8 @@ fun Resource<TeamSearchResultDto?>.toDomain(): Resource<TeamSearchResultItem?> {
 
 fun TeamDto.toDomain(): TeamItem {
     return TeamItem(
-        name = this.strTeam,
-        imageUrl = this.strStadiumThumb
+        name = this.strTeam ?: "",
+        imageUrl = this.strStadiumThumb ?: ""
     )
 }
 
