@@ -19,8 +19,9 @@ fun Resource<TeamSearchResultDto?>.toDomain(): Resource<TeamSearchResultItem?> {
 
 fun TeamDto.toDomain(): TeamItem {
     return TeamItem(
-        name = this.strTeam ?: "",
-        imageUrl = this.strStadiumThumb ?: ""
+        id = this.idTeam,
+        name = this.strTeam,
+        imageUrl = this.strTeamBadge
     )
 }
 
