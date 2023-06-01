@@ -13,7 +13,7 @@ class RemoteLeagueRepositoryImpl(private val leagueService: LeagueService) :
     // since the backend do not have a working cache we will use a local cache for that demo
     var cache: LeagueResultsDto? = null
 
-    override suspend fun getLeagues(): Resource<LeagueResultItem?> {
+    override suspend fun getLeagues(): Resource<LeagueResultItem> {
         if (cache == null) {
             cache = leagueService.getAllLeagues()
         }

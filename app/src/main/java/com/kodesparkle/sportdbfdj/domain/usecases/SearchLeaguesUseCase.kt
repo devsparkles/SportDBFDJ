@@ -1,10 +1,7 @@
 package com.kodesparkle.sportdbfdj.domain.usecases
 
 import com.kodesparkle.sportdbfdj.domain.model.LeagueItem
-import com.kodesparkle.sportdbfdj.domain.model.LeagueResultItem
 import com.kodesparkle.sportdbfdj.domain.repository.RemoteLeagueRepository
-import com.kodesparkle.sportdbfdj.domain.repository.RemoteTeamRepository
-import com.kodesparkle.sportdbfdj.utils.resource.Resource
 import javax.inject.Inject
 
 // respecting clean architecture all the logic exist
@@ -13,7 +10,7 @@ class SearchLeaguesUseCase @Inject constructor(private val remoteLeagueRepositor
 
 
     suspend operator fun invoke(query: String): MutableList<LeagueItem> {
-        val leagues=  remoteLeagueRepository.getLeagues()
+        val leagues = remoteLeagueRepository.getLeagues()
         if (leagues.isNotAnError()) {
             val l = leagues.value()?.leagues
             l?.let {

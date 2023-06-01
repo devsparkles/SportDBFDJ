@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-
 @HiltViewModel
 class TeamListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,

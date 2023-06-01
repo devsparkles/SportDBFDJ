@@ -8,21 +8,18 @@ import com.kodesparkle.sportdbfdj.data.remote.team.service.TeamService
 import com.kodesparkle.sportdbfdj.domain.repository.RemoteLeagueRepository
 import com.kodesparkle.sportdbfdj.domain.repository.RemoteTeamRepository
 import com.kodesparkle.sportdbfdj.utils.CacheInterceptor
-import com.kodesparkle.sportdbfdj.utils.NetworkUtils
 import com.kodesparkle.sportdbfdj.utils.NetworkUtils.getCacheSize
-import com.kodesparkle.sportdbfdj.utils.NetworkUtils.hasNetwork
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.CacheControl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
@@ -37,7 +34,10 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun providesOkHttpClient(@ApplicationContext  appContext: Context, httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+    fun providesOkHttpClient(
+        @ApplicationContext appContext: Context,
+        httpLoggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .cache(getCacheSize(appContext))
             .addNetworkInterceptor(CacheInterceptor())

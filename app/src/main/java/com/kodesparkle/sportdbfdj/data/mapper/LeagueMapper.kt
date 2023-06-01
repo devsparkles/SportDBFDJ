@@ -6,11 +6,14 @@ import com.kodesparkle.sportdbfdj.domain.model.LeagueItem
 import com.kodesparkle.sportdbfdj.domain.model.LeagueResultItem
 import com.kodesparkle.sportdbfdj.utils.resource.Resource
 
-fun Resource<LeagueResultsDto?>.toDomain(): Resource<LeagueResultItem?> {
+fun Resource<LeagueResultsDto?>.toDomain(): Resource<LeagueResultItem> {
     return when (this) {
         is Resource.Success -> Resource.Success(
-            this.value()?.toDomain()
+            this.value()?.toDomain() ?: LeagueResultItem(
+                leagues = mutableListOf()
+            )
         )
+
         is Resource.SuccessWithoutContent -> Resource.SuccessWithoutContent()
         is Resource.Error -> Resource.Error(this.error())
         is Resource.Loading -> Resource.Loading()

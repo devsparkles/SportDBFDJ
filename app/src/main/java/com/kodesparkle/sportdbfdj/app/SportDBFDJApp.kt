@@ -6,8 +6,4 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class SportDBFDJApp : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-    }
-
 }

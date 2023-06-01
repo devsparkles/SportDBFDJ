@@ -5,5 +5,5 @@ import com.kodesparkle.sportdbfdj.utils.resource.Resource
 
 interface RemoteLeagueRepository {
 
-    suspend fun getLeagues(): Resource<LeagueResultItem?>
+    suspend fun getLeagues(): Resource<LeagueResultItem>
 }

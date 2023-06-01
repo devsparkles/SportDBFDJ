@@ -12,7 +12,7 @@ sealed class Screen(val name: String, val route: String) {
 
     object TeamList : Screen(
         name = "TeamList", route = "teamlist"
-    ){
+    ) {
         const val leagueNameArg = "leagueName"
         val routeWithArgs = "$route/{$leagueNameArg}"
         val arguments = listOf(

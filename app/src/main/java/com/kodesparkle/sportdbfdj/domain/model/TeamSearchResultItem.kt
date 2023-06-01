@@ -7,4 +7,4 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TeamSearchResultItem(
     val teams: List<TeamItem>
-): Parcelable
+) : Parcelable

@@ -8,7 +8,7 @@ import com.kodesparkle.sportdbfdj.utils.resource.Resource
 
 class RemoteTeamRepositoryImpl(private val teamService: TeamService) : RemoteTeamRepository {
 
-    override suspend fun searchTeamByLeagueName(leagueName: String): Resource<TeamSearchResultItem?> {
+    override suspend fun searchTeamByLeagueName(leagueName: String): Resource<TeamSearchResultItem> {
         try {
             val response = Resource.of { teamService.searchTeamsByLeague(leagueName) }
             // if we wanted to call other services to combine their information we do that here
